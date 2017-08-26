@@ -18,7 +18,7 @@ class ProfileViewController: UIViewController {
     var person: String = ""
     var didTapClose: () -> () = {}
 
-    @IBAction func close(sender: AnyObject) {
+    @IBAction func close(_ sender: AnyObject) {
         didTapClose()
     }
 }
@@ -40,23 +40,23 @@ class EpisodesViewController: UITableViewController {
     var didSelect: (Episode) -> () = { _ in }
     var didTapProfile: () -> () = {}
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = episodes[indexPath.row]
         didSelect(episode)
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let episode = episodes[indexPath.row]
         cell.textLabel?.text = episode.title
         return cell
     }
     
-    @IBAction func showProfile(sender: AnyObject) {
+    @IBAction func showProfile(_ sender: AnyObject) {
         didTapProfile()
     }
 }
@@ -73,19 +73,19 @@ final class App {
         episodesVC.didTapProfile = showProfile
     }
     
-    func showEpisode(episode: Episode) {
-        let detailVC = storyboard.instantiateViewControllerWithIdentifier("Detail") as! DetailViewController
+    func showEpisode(_ episode: Episode) {
+        let detailVC = storyboard.instantiateViewController(withIdentifier: "Detail") as! DetailViewController
         detailVC.episode = episode
         navigationController.pushViewController(detailVC, animated: true)
     }
     
     func showProfile() {
-        let profileNC = self.storyboard.instantiateViewControllerWithIdentifier("Profile") as! UINavigationController
+        let profileNC = self.storyboard.instantiateViewController(withIdentifier: "Profile") as! UINavigationController
         let profileVC = profileNC.viewControllers[0] as! ProfileViewController
         profileVC.didTapClose = {
-            self.navigationController.dismissViewControllerAnimated(true, completion: nil)
+            self.navigationController.dismiss(animated: true, completion: nil)
         }
-        navigationController.presentViewController(profileNC, animated: true, completion: nil)
+        navigationController.present(profileNC, animated: true, completion: nil)
     }
 }
 
@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var app: App?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         if let window = window {
             app = App(window: window)
         }
